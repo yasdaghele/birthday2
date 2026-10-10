@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1240">
+<title>ميلادك سعيد يا 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" media="print" onload="this.media='all'">
+<style>
+:root{
+  --img:url("sc.jpg");
+  --w:min(92vw,780px,calc(52svh*1.77049));
+  --h:calc(var(--w)/1.77049);
+  --tip:56%;
+  --gold:#ffd98a;
+  --rose:#ff5c8a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#b3aadb;font-family:"Lalezar","Tahoma","Segoe UI","Noto Sans Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.stage{
+  position:relative;min-height:100svh;overflow:hidden;
+  background:radial-gradient(90% 70% at 50% 35%,#f1edff 0%,#d5cfef 55%,#b3aadb 100%);
+}
+.desk{min-height:100svh;display:grid;place-items:center}
+.wrap{
+  display:flex;flex-direction:column;align-items:center;gap:calc(var(--h)*.16);
+  transform:translateY(calc(var(--h)*.2));
+  transform-origin:50% 20%;
+}
+
+/* ---------- envelope ---------- */
+.envelope{
+  position:relative;width:var(--w);aspect-ratio:1080/610;padding:0;border:0;background:none;
+  cursor:pointer;perspective:1400px;-webkit-tap-highlight-color:transparent;
+  animation:bob 5s ease-in-out infinite;
+}
+.envelope:focus-visible{outline:3px solid #5b4bc4;outline-offset:10px;border-radius:10px}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-7px) rotate(.6deg)}}
+.envelope>*{position:absolute;pointer-events:none}
+.shadow{left:2%;right:2%;bottom:-7%;height:16%;background:radial-gradient(ellipse at center,rgba(38,26,92,.5),transparent 68%);filter:blur(10px);z-index:0}
+.inside{inset:0;border-radius:8px;z-index:1;background:linear-gradient(160deg,#1a2270,#0a0f33)}
+.body{
+  inset:0;z-index:2;border-radius:8px;
+  background-image:var(--img);background-size:100% 100%;
+  clip-path:polygon(0 0,50% var(--tip),100% 0,100% 100%,0 100%);
+}
+.body::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.10),transparent 38%,rgba(0,0,0,.2))}
+.flap{
+  left:0;top:0;width:100%;height:var(--tip);z-index:4;transform-origin:50% 0;
+  clip-path:polygon(0 0,100% 0,50% 100%);border-radius:8px 8px 0 0;
+  transition:transform .5s ease;
+}
+.flap .face{position:absolute;inset:0}
+.flap .front{background-image:var(--img);background-size:100% 178.6%;background-position:top}
+.flap .front::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 40%,rgba(0,0,0,.28))}
+.flap .back{
+  opacity:0;
+  background:
+    radial-gradient(circle at 22% 30%,#fff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 70% 24%,#cfe0ff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 46% 58%,#fff 0 1.2px,transparent 1.8px),
+    linear-gradient(135deg,#232c8a,#0d1340);
+}
+.folds{inset:0;width:100%;height:100%;z-index:5;overflow:visible}
+.folds path{fill:none;vector-effect:non-scaling-stroke}
+.seal{
+  left:50%;top:var(--tip);z-index:6;width:clamp(36px,7.4%,56px);aspect-ratio:1;translate:-50% -50%;
+  border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 28%,#ff92a8,#d1234f 58%,#87112f);
+  box-shadow:0 3px 10px rgba(0,0,0,.45),inset 0 -3px 5px rgba(0,0,0,.3),inset 0 2px 3px rgba(255,255,255,.4);
+  animation:seal 2.6s ease-in-out infinite;
+}
+.seal svg{width:50%;fill:#ffe3ea;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+@keyframes seal{0%,100%{scale:1}50%{scale:1.09}}
+
+.hint{margin:0;font-size:clamp(1.05rem,2.6vw,1.35rem);color:#463b86;letter-spacing:.02em;animation:breathe 2.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.55}50%{opacity:1}}
+
+@media (hover:hover){.envelope:hover .flap{transform:rotateX(11deg)}}
+
+/* open */
+.stage.open .envelope{animation:none}
+.stage.open .flap{animation:flapOpen 1s cubic-bezier(.5,0,.5,1) forwards}
+.stage.open .flap .front{animation:swapOut 1s linear forwards}
+.stage.open .flap .back{animation:swapIn 1s linear forwards}
+.stage.open .seal{animation:sealOff .35s ease-in forwards}
+.stage.open .hint{animation:none;opacity:0;transition:opacity .3s}
+.stage.open .envelope{cursor:default}
+@keyframes flapOpen{to{transform:rotateX(180deg)}}
+@keyframes swapOut{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes swapIn{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@keyframes sealOff{to{scale:1.7;opacity:0}}
+
+.stage.entering .wrap{
+  transform:translateY(calc(var(--h)*.2)) scale(2.8);
+  transition:transform 2.3s cubic-bezier(.6,0,.3,1);
+}
+
+/* ---------- night sky ---------- */
+.sky{
+  position:fixed;inset:0;z-index:10;visibility:hidden;overflow:hidden;
+  clip-path:circle(0px at var(--cx,50%) var(--cy,30%));
+  background:
+    radial-gradient(120% 70% at 50% 118%,#3c2475 0%,transparent 62%),
+    linear-gradient(#030720 0%,#0a1140 55%,#191552 100%);
+  transition:opacity .7s;
+}
+.sky::before{
+  content:"";position:absolute;inset:-10%;pointer-events:none;
+  background:linear-gradient(112deg,transparent 32%,rgba(150,130,255,.10) 50%,transparent 68%);
+  filter:blur(24px);
+}
+.stage.entering .sky{visibility:visible;animation:enter 1.8s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes enter{to{clip-path:circle(95vmax at var(--cx,50%) var(--cy,30%))}}
+.stage .sky.leaving{opacity:0 !important}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.moon{
+  --m:clamp(46px,7vw,86px);
+  position:absolute;top:8svh;inset-inline-start:9vw;width:var(--m);height:var(--m);border-radius:50%;
+  box-shadow:inset calc(var(--m)*.2) calc(var(--m)*-.12) 0 0 #fff2c4;
+  filter:drop-shadow(0 0 14px rgba(255,238,190,.55));
+  opacity:0;transition:opacity 1.6s .3s;
+}
+.sky.show .moon{opacity:1}
+
+.title{
+  position:absolute;inset:0 0 10svh;margin:0;display:grid;place-content:center;justify-items:center;
+  padding:0 6vw;text-align:center;pointer-events:none;z-index:3;
+  font-weight:400;font-size:clamp(2.7rem,12vw,6.6rem);line-height:1.45;color:#fff4d8;text-wrap:balance;
+  text-shadow:0 0 22px rgba(255,196,120,.55),0 0 70px rgba(255,110,160,.38);
+}
+.title .w{display:inline-block;opacity:0;transform:translateY(26px) scale(.9);filter:blur(12px);margin-inline:.14em}
+.sky.show .title .w{animation:wordIn 1s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.26s)}
+@keyframes wordIn{to{opacity:1;transform:none;filter:blur(0)}}
+.heart{display:inline-block;width:.72em;height:.72em;fill:var(--rose);vertical-align:-.04em;margin-inline-start:.1em;filter:drop-shadow(0 0 10px rgba(255,92,138,.8));animation:beat 1.25s ease-in-out 2.2s infinite}
+@keyframes beat{0%,100%{scale:1}14%{scale:1.22}28%{scale:1}42%{scale:1.16}}
+
+.replay{
+  position:absolute;z-index:4;left:50%;bottom:max(20px,env(safe-area-inset-bottom));translate:-50% 0;
+  font:inherit;font-size:1.05rem;color:#e9e4ff;background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:.45em 1.3em;cursor:pointer;
+  backdrop-filter:blur(6px);opacity:0;transition:opacity 1s 6s,background .2s;
+}
+.sky.show .replay{opacity:1}
+.replay:hover{background:rgba(255,255,255,.18)}
+.replay:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  .envelope,.seal,.hint{animation:none}
+  .stage.entering .wrap{transform:translateY(calc(var(--h)*.2));transition:none}
+  .sky{clip-path:none;opacity:0}
+  .stage.entering .sky{opacity:1;animation:none}
+  .title .w{transition:none}
+  .heart{animation:none}
+}
+</style>
+</head>
+<body>
+<main class="stage" id="stage">
+  <div class="desk">
+    <div class="wrap" id="wrap">
+      <button class="envelope" id="envelope" type="button" aria-label="اضغط لفتح بطاقة التهنئة">
+        <span class="shadow"></span>
+        <span class="inside"></span>
+        <span class="body"></span>
+        <span class="flap"><span class="face front"></span><span class="face back"></span></span>
+        <svg class="folds" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 100 L50 56 L100 100" stroke="rgba(255,255,255,.17)" stroke-width="1.2"/>
+          <path d="M0 0 L50 56 L100 0" stroke="rgba(0,0,0,.4)" stroke-width="1.4"/>
+          <path d="M0 0 L50 56 L100 0" stroke="rgba(255,255,255,.16)" stroke-width=".8" transform="translate(0 .6)"/>
+        </svg>
+        <span class="seal" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.7 1.1 5.7 3.2C14 6.100 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg>
+        </span>
+      </button>
+      <p class="hint" id="hint">اضغط على الظرف</p>
+    </div>
+  </div>
+
+  <section class="sky" id="sky">
+    <canvas id="stars"></canvas>
+    <canvas id="fx"></canvas>
+    <div class="moon"></div>
+    <h1 class="title" lang="ar">
+      <span>
+        <span class="w" style="--i:0">ميلادك</span>
+        <span class="w" style="--i:1">سعيد</span>
+        <span class="w" style="--i:2">يا</span>
+        <span class="w" style="--i:3" dir="ltr">2</span>
+        <span class="w" style="--i:4">ياحلوتنا<svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.7 1.1 5.7 3.2C14 6.100 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></span>
+      </span>
+    </h1>
+    <button class="replay" id="replay" type="button">إعادة الفتح</button>
+  </section>
+</main>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const stage = $('#stage'), envelope = $('#envelope'), sky = $('#sky'), wrap = $('#wrap');
+  const fxc = $('#fx'), stc = $('#stars'), replay = $('#replay');
+  const fx = fxc.getContext('2d'), st = stc.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = a => a[Math.random() * a.length | 0];
+  const HUES = [350, 40, 200, 285, 150, 20, 320, 55];
+  const TYPES = ['peony','peony','peony','ring','ring','heart','willow','willow','glitter','glitter','double'];
+
+  let W = 0, H = 0, active = false, showOn = false, last = 0, nextLaunch = 0, lastTap = 0;
+  let stars = [], shooters = [], parts = [], rockets = [], sched = [];
+
+  /* ---------- sizing ---------- */
+  function resize() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    for (const cv of [fxc, stc]) { cv.width = W * dpr; cv.height = H * dpr; }
+    fx.setTransform(dpr, 0, 0, dpr, 0, 0); st.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fx.lineCap = 'round';
+    const n = Math.floor(W * H / (W < 620 ? 6500 : 5200));
+    stars = Array.from({ length: n }, () => {
+      const big = Math.random() < .05;
+      return { x: Math.random() * W, y: Math.random() * H, r: big ? rnd(1.3, 1.9) : rnd(.3, 1.2), big,
+        a: rnd(.4, 1), s: rnd(.7, 2.4), p: Math.random() * 6.283,
+        c: Math.random() < .18 ? '#ffe9b0' : (Math.random() < .5 ? '#ffffff' : '#c9dcff') };
+    });
+  }
+  addEventListener('resize', resize);
+  resize();
+
+  /* ---------- stars ---------- */
+  function drawStars(t, f) {
+    st.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      st.globalAlpha = s.a * (.58 + .42 * Math.sin(t * s.s + s.p));
+      st.fillStyle = s.c;
+      st.beginPath(); st.arc(s.x, s.y, s.r, 0, 6.283); st.fill();
+      if (s.big) {
+        st.strokeStyle = s.c; st.lineWidth = .7; st.beginPath();
+        st.moveTo(s.x - s.r * 4.5, s.y); st.lineTo(s.x + s.r * 4.5, s.y);
+        st.moveTo(s.x, s.y - s.r * 4.5); st.lineTo(s.x, s.y + s.r * 4.5); st.stroke();
+      }
+    }
+    st.globalAlpha = 1;
+    if (Math.random() < .004 * f && shooters.length < 2) {
+      const d = Math.random() < .5 ? 1 : -1;
+      shooters.push({ x: rnd(.15, .85) * W, y: rnd(0, .3) * H, vx: d * rnd(9, 13), vy: rnd(4, 7), life: 1 });
+    }
+    for (let i = shooters.length - 1; i >= 0; i--) {
+      const s = shooters[i];
+      s.x += s.vx * f; s.y += s.vy * f; s.life -= .022 * f;
+      if (s.life <= 0) { shooters.splice(i, 1); continue; }
+      const g = st.createLinearGradient(s.x, s.y, s.x - s.vx * 9, s.y - s.vy * 9);
+      g.addColorStop(0, `rgba(255,255,255,${s.life})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+      st.strokeStyle = g; st.lineWidth = 1.6; st.beginPath();
+      st.moveTo(s.x, s.y); st.lineTo(s.x - s.vx * 9, s.y - s.vy * 9); st.stroke();
+    }
+  }
+
+  /* ---------- fireworks ---------- */
+  const P = (x, y, vx, vy, o) => parts.push(Object.assign(
+    { x, y, px: x, py: y, vx, vy, g: .045, fr: .985, life: 1, decay: .012, h: 0, s: 100, l: 62, size: 1.7, glit: 0 }, o));
+  const scale = () => Math.max(.55, Math.min(1.15, Math.min(W, 1000) / 900));
+
+  function burst(x, y, type, h) {
+    if (parts.length > 2200) return;
+    const q = (W < 620 ? .62 : 1) * (reduce ? .55 : 1), sc = scale(), h2 = (h + rnd(35, 90)) % 360;
+    if (type === 'peony' || type === 'glitter' || type === 'double') {
+      const n = (rnd(85, 115) * q) | 0, sp = rnd(3.6, 5) * sc, gl = type === 'glitter';
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * 6.2832, s = sp * (.5 + .5 * Math.random());
+        P(x, y, Math.cos(a) * s, Math.sin(a) * s,
+          { h: i % 3 ? h : h2, decay: rnd(.009, .015), glit: gl ? .08 : 0, l: gl ? 82 : 62, s: gl ? 30 : 100 });
+      }
+      if (type === 'double') sched.push({ t: performance.now() + 260, fn: () => burst(x, y, 'ring', h2) });
+    } else if (type === 'ring') {
+      const n = (70 * q) | 0, sp = 4.3 * sc, tilt = rnd(.3, 1), rot = rnd(0, 3.14);
+      for (let k = 0; k < 2; k++) for (let i = 0; i < n * (k ? .6 : 1); i++) {
+        const a = i / (n * (k ? .6 : 1)) * 6.2832, m = k ? .55 : 1;
+        const vx = Math.cos(a) * sp * m, vy = Math.sin(a) * sp * tilt * m;
+        P(x, y, vx * Math.cos(rot) - vy * Math.sin(rot), vx * Math.sin(rot) + vy * Math.cos(rot),
+          { h: k ? h2 : h, fr: .975, decay: .011, g: .02 });
+      }
+    } else if (type === 'heart') {
+      const n = (64 * q) | 0;
+      for (let k = 0; k < 2; k++) for (let i = 0; i < n; i++) {
+        const t = i / n * 6.2832, m = k ? .55 : 1;
+        const hx = 16 * Math.pow(Math.sin(t), 3);
+        const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        P(x, y, hx * .24 * sc * m, hy * .24 * sc * m,
+          { h: k ? 42 : 345 + rnd(-8, 8), l: k ? 72 : 62, fr: .965, g: .012, decay: .0095, size: 2.1 });
+      }
+    } else if (type === 'willow') {
+      const n = (75 * q) | 0, sp = rnd(2.4, 3.6) * sc;
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * 6.2832, s = sp * (.6 + .4 * Math.random());
+        P(x, y, Math.cos(a) * s, Math.sin(a) * s, { h: 42, l: 70, fr: .975, g: .05, decay: .0065, size: 1.5, glit: .02 });
+      }
+    }
+  }
+
+  function launch(type, x, ty) {
+    const x0 = x ?? rnd(.1, .9) * W;
+    rockets.push({ x: x0, y: H + 8, x0, y0: H + 8, tx: x0 + rnd(-50, 50),
+      ty: ty ?? (type === 'heart' ? rnd(.26, .38) : rnd(.13, .46)) * H, t: 0, dur: rnd(50, 70), type, h: pick(HUES) });
+  }
+
+  function startShow() {
+    showOn = true;
+    const t0 = performance.now(); nextLaunch = t0 + 3600;
+    [[0, 'peony', .28], [380, 'ring', .72], [800, 'heart', .5], [1250, 'willow', .16],
+     [1650, 'double', .84], [2150, 'glitter', .4]]
+      .forEach(([d, type, xf]) => sched.push({ t: t0 + d, fn: () => launch(type, xf * W + rnd(-30, 30)) }));
+  }
+
+  function frame(now) {
+    if (!active) return;
+    requestAnimationFrame(frame);
+    const f = Math.min(now - (last || now), 50) / 16.667 || 1; last = now;
+    drawStars(now / 1000, f);
+
+    fx.globalCompositeOperation = 'destination-out';
+    fx.fillStyle = `rgba(0,0,0,${Math.min(.4, .2 * f)})`;
+    fx.fillRect(0, 0, W, H);
+    fx.globalCompositeOperation = 'lighter';
+
+    if (showOn && now >= nextLaunch) {
+      const k = Math.random() < .3 ? 2 : 1;
+      for (let i = 0; i < k; i++) launch(pick(TYPES));
+      nextLaunch = now + rnd(650, 1350) * (reduce ? 2 : 1);
+    }
+    for (let i = sched.length - 1; i >= 0; i--) if (now >= sched[i].t) sched.splice(i, 1)[0].fn();
+
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.t += f / r.dur;
+      const e = 1 - Math.pow(1 - Math.min(r.t, 1), 3);
+      r.x = r.x0 + (r.tx - r.x0) * e; r.y = r.y0 + (r.ty - r.y0) * e;
+      for (let k = 0; k < 2; k++) P(r.x, r.y, rnd(-.3, .3), rnd(.3, 1.1), { g: .03, decay: .04, h: 40, l: 80, size: 1.2 });
+      fx.fillStyle = 'rgba(255,238,196,.95)';
+      fx.beginPath(); fx.arc(r.x, r.y, 2, 0, 6.283); fx.fill();
+      if (r.t >= 1) { burst(r.x, r.y, r.type, r.h); rockets.splice(i, 1); }
+    }
+
+    if (showOn) {
+      const sc = scale();
+      for (const side of [-1, 1]) {
+        const x = side < 0 ? W * .05 : W * .95;
+        for (let i = 0, n = Math.round((reduce ? 1 : 2) * f); i < n; i++) {
+          const a = -Math.PI / 2 - side * rnd(-.1, .4), s = rnd(5, 8.5) * sc;
+          P(x, H + 2, Math.cos(a) * s, Math.sin(a) * s, { g: .14, fr: .988, decay: rnd(.018, .03), h: rnd(28, 50), l: 68, size: 1.3 });
+        }
+      }
+    }
+
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.px = p.x; p.py = p.y;
+      const fr = Math.pow(p.fr, f);
+      p.vx *= fr; p.vy *= fr; p.vy += p.g * f; p.x += p.vx * f; p.y += p.vy * f; p.life -= p.decay * f;
+      if (p.life <= 0) { parts[i] = parts[parts.length - 1]; parts.pop(); continue; }
+      if (p.glit && Math.random() < p.glit * f && parts.length < 2200)
+        P(p.x, p.y, rnd(-.4, .4), rnd(-.2, .6), { h: 50, s: 20, l: 90, size: 1, decay: .06, g: .03 });
+      const a = (p.life < .35 ? p.life / .35 : 1) * (p.life < .5 && Math.random() < .25 ? .35 : 1);
+      fx.strokeStyle = `hsla(${p.h},${p.s}%,${p.l}%,${a})`;
+      fx.lineWidth = p.size * (.6 + .4 * p.life);
+      fx.beginPath(); fx.moveTo(p.px, p.py); fx.lineTo(p.x, p.y + .01); fx.stroke();
+    }
+    if (!parts.length && !rockets.length) fx.clearRect(0, 0, W, H);
+  }
+
+  /* ---------- open / replay ---------- */
+  let timers = [];
+  const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+  function open() {
+    if (stage.classList.contains('open')) return;
+    const r = envelope.getBoundingClientRect();
+    sky.style.setProperty('--cx', (r.left + r.width / 2) + 'px');
+    sky.style.setProperty('--cy', (r.top + r.height * .2) + 'px');
+    stage.classList.add('open');
+    later(() => {
+      stage.classList.add('entering');
+      resize(); active = true; last = 0; requestAnimationFrame(frame);
+    }, 950);
+    later(startShow, 1700);
+    later(() => sky.classList.add('show'), 2000);
+  }
+
+  function reset() {
+    sky.classList.add('leaving');
+    later(() => {
+      active = false; showOn = false; parts = []; rockets = []; sched = []; shooters = [];
+      fx.clearRect(0, 0, W, H); st.clearRect(0, 0, W, H);
+      sky.classList.remove('show');
+      stage.classList.remove('entering', 'open');
+      sky.classList.remove('leaving');
+      wrap.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: 'ease-out' });
+    }, 750);
+  }
+
+  envelope.addEventListener('click', open);
+  replay.addEventListener('click', e => { e.stopPropagation(); reset(); });
+
+  // tap the sky to launch your own firework
+  sky.addEventListener('pointerdown', e => {
+    if (!showOn || e.target.closest('button')) return;
+    const now = performance.now();
+    if (now - lastTap < 220) return;
+    lastTap = now;
+    launch(pick(TYPES), e.clientX, e.clientY);
+  });
+})();
+</script>
+</body>
+</html>
